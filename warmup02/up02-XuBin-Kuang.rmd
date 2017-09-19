@@ -1,0 +1,35 @@
+---
+title: "up02-XuBin-Kuang"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+```{r}
+class(player)
+class(points)
+class(position)
+class(salary)
+```
+
+```{r}
+summary(points)
+mean(points)
+min(points)
+max(points)
+sd(points)
+quantile(points)
+median(points)
+hist(points)
+boxplot(points)
+density(points)
+```
+```{r}
+factor(team)
+table(team)
+barplot(team)
+```
