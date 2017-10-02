@@ -4,14 +4,11 @@ Xu-Bin Kuang
 01/10/2017
 
 ``` r
-github <- "https://github.com/ucb-stat133/stat133-fall-2017/raw/master/" 
-file <- "data/nba2017-player-statistics.csv"
-csv <- paste0(github, file)
-download.file(url = csv, destfile = 'nba2017-player-statistics.csv')
+setwd("/Users/KuangXu-Bin/Desktop/Berkeley/Fall_2017/stat133/stat133-hws-fall17/hw02")
 ```
 
 ``` r
-DataBase <- data.frame(read.csv(csv, header = TRUE, colClasses=c("Player"="character", "Team" = "character", "Experience" = "character", "Position" = "factor", "Salary" = 'double')))
+DataBase <- data.frame(read.csv("https://github.com/ucb-stat133/stat133-fall-2017/raw/master/data/nba2017-player-statistics.csv", header = TRUE, colClasses=c("Player"="character", "Team" = "character", "Experience" = "character", "Position" = "factor", "Salary" = 'double')))
 str(DataBase)
 ```
 
@@ -48,7 +45,7 @@ library(readr)
     ## Warning: package 'readr' was built under R version 3.2.5
 
 ``` r
-DataReadr <- read_csv(csv, col_types = cols(.default = col_integer(),Player = col_character(), Team = col_character(), Position = col_factor(c('C','PF','PG','SF','SG')), Experience = col_character(), Salary = col_double()))
+DataReadr <- read_csv("https://github.com/ucb-stat133/stat133-fall-2017/raw/master/data/nba2017-player-statistics.csv", col_types = cols(.default = col_integer(),Player = col_character(), Team = col_character(), Position = col_factor(c('C','PF','PG','SF','SG')), Experience = col_character(), Salary = col_double()))
 ```
 
     ## `curl` package not installed, falling back to using `url()`
@@ -194,7 +191,22 @@ Top = arrange(DataBase, desc(EFF))
 ``` r
 Top = slice(Top, 1:10)
 Top = select(Top, Player, Team, Salary, EFF)
+Top
 ```
+
+    ## # A tibble: 10 x 4
+    ##                   Player  Team   Salary      EFF
+    ##                    <chr> <chr>    <dbl>    <dbl>
+    ##  1     Russell Westbrook   OKC 26540100 33.83951
+    ##  2          James Harden   HOU 26540100 32.34568
+    ##  3         Anthony Davis   NOP 22116750 31.16000
+    ##  4          LeBron James   CLE 30963450 30.97297
+    ##  5    Karl-Anthony Towns   MIN  5960160 30.32927
+    ##  6          Kevin Durant   GSW 26540100 30.19355
+    ##  7 Giannis Antetokounmpo   MIL  2995421 28.37500
+    ##  8      DeMarcus Cousins   NOP 16957900 27.94118
+    ##  9          Jimmy Butler   CHI 17552209 25.60526
+    ## 10      Hassan Whiteside   MIA 22116750 25.36364
 
 ``` r
 #Players with Negative EFF

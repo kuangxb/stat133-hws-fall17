@@ -14,13 +14,13 @@ setwd("/Users/KuangXu-Bin/Desktop/Berkeley/Fall_2017/stat133/stat133-hws-fall17/
 ```
 
 ```{r}
-DataBase <- data.frame(read.csv(csv, header = TRUE, colClasses=c("Player"="character", "Team" = "character", "Experience" = "character", "Position" = "factor", "Salary" = 'double')))
+DataBase <- data.frame(read.csv("https://github.com/ucb-stat133/stat133-fall-2017/raw/master/data/nba2017-player-statistics.csv", header = TRUE, colClasses=c("Player"="character", "Team" = "character", "Experience" = "character", "Position" = "factor", "Salary" = 'double')))
 str(DataBase)
 ```
 
 ```{r}
 library(readr)
-DataReadr <- read_csv(csv, col_types = cols(.default = col_integer(),Player = col_character(), Team = col_character(), Position = col_factor(c('C','PF','PG','SF','SG')), Experience = col_character(), Salary = col_double()))
+DataReadr <- read_csv("https://github.com/ucb-stat133/stat133-fall-2017/raw/master/data/nba2017-player-statistics.csv", col_types = cols(.default = col_integer(),Player = col_character(), Team = col_character(), Position = col_factor(c('C','PF','PG','SF','SG')), Experience = col_character(), Salary = col_double()))
 str(DataReadr)
 
 ```
@@ -54,6 +54,7 @@ library(dplyr)
 Top = arrange(DataBase, desc(EFF))
 Top = slice(Top, 1:10)
 Top = select(Top, Player, Team, Salary, EFF)
+Top
 ```
 
 
@@ -88,3 +89,4 @@ corr
 
 #The correlation is lower for more established players because there is a better track record for teams to decide on after rookies have been removed. 
 ```
+
