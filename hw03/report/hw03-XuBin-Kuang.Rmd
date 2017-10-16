@@ -1,0 +1,94 @@
+---
+title: "hw03-xubin-kuang"
+author: "Xu-Bin Kuang"
+date: "15/10/2017"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r Load Packages}
+# packages
+library(readr)    # importing data
+library(dplyr)    # data wrangling
+library(ggplot2)  # graphics
+
+# import data
+teams <- read_csv("../data/nba2017-teams.csv")
+```
+
+```{r NBA Teams Ranked by Total Salary}
+ggplot(teams, aes(x = reorder(team, salary), y=salary)) +
+  geom_bar(stat='identity') +
+  coord_flip() +
+  labs(x = "Team", y = "Salary (in millions)", 
+       title = "NBA Teams Ranked by Total Salary") +
+  geom_hline(yintercept = mean(teams$salary), color='red')
+```
+
+The Warriors score the most total points with roughly 8,500 points in total. The average number of points for all other teams is around 7,700 points.
+```{r}
+ggplot(teams, aes(x = reorder(team, points), y=points)) +
+  geom_bar(stat='identity') +
+  coord_flip() +
+  labs(x = "Team", y = "Total Points", 
+       title = "NBA Teams Ranked by Total Points") +
+  geom_hline(yintercept = mean(teams$points), color='red')
+```
+
+Finally, we *rank by team efficiency.* 
+The Warriors and the Cavaliers lead the league in terms of effcienc.
+
+```{r}
+ggplot(teams, aes(x = reorder(team, efficiency), y=efficiency)) +
+  geom_bar(stat='identity') +
+  coord_flip() +
+  labs(x = "Team", y = "Total Efficiency", 
+       title = "NBA Teams Ranked by Total Efficiency") +
+  geom_hline(yintercept = mean(teams$efficiency), color='red')
+```
+
+###Principal Components Analsysis (PCA). 
+```{r}
+# data frame with eigenvalues
+pca_vars <- select(teams, points3, points2, free_throws, off_rebounds, def_rebounds, assists, steals,
+                   blocks, turnovers, fouls)
+pca <- prcomp(pca_vars, scale. = TRUE)
+eigen <- data.frame(eigenvalue = round(pca$sdev^2,4), prop = round(pca$sdev^2 / sum(pca$sdev^2), 4))
+eigen$cumprop <- cumsum(eigen$prop)
+eigen
+```
+*Plot PC1 and PC2.*
+```{r}
+# create another df
+pca_df = as.data.frame(pca$x)
+rownames(pca_df) <- teams$team
+# head(pca_df)
+
+# plot of observations
+ggplot(data = pca_df, aes(x = PC1, y = PC2, label = rownames(pca_df))) +
+  geom_hline(yintercept = 0, colour = "gray65") +
+  geom_vline(xintercept = 0, colour = "gray65") +
+  geom_text(colour = "black", alpha = 0.8, size = 4) +
+  ggtitle("PCA Plot (PCA1 and PCA2)")
+#plot(pca$PC1, pca$PC2)
+```
+
+*Transform PC1.*
+```{r}
+transformed_PC1 <- 100 * ((pca_df$PC1 - min(pca_df$PC1)) / (max(pca_df$PC1) - min(pca_df$PC1)))
+transformed_PC1
+```
+
+*Plot with new PC1 (scaled from 0 to 100).* 
+GSW is clearly the top team based on PCA with the Sacramento Kings being the worst
+
+```{r}
+ggplot(teams, aes(x = reorder(team, transformed_PC1), y=transformed_PC1)) +
+  geom_bar(stat='identity') +
+  coord_flip() +
+  labs(x = "Team", y = "First PC (scaled from 0 to 100)", 
+       title = "NBA Teams Ranked by Scaled PC1")
+```
