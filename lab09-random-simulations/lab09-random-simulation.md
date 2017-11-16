@@ -85,20 +85,50 @@ The random experiment consists of generating a random number that follows a unif
 
 ``` r
 # your vectors box1 and box2
+box1 <- c('blue', 'blue', 'red')
+box2 <- c('blue', 'blue', rep('red', 3), 'white')
 ```
 
 1.  The random experiment involves generating a uniform random number using `runif(1)`. If this number is greater than 0.5, get a `sample()` without replacement of `size = 4` from `box1.` Otherwise, get a `sample()` without replacement of `size = 4` from `box2`.
 
 ``` r
 # your code to simulate one random experiment
+random <- function() {
+  if (runif(1) > 0.5) {
+    sample(box1, size = 4, replace = TRUE)
+  } else {
+    sample(box2, size = 4, replace = FALSE)
+  }
+}
+random()
 ```
+
+    ## [1] "red"   "red"   "red"   "white"
 
 1.  Repeat the experiment 1000 times using a `for` loop. To store the drawn samples, use a matrix `drawn_balls`. This matrix will have 1000 rows and 4 columns. In each row you assign the output of a random sample of balls.
 
 ``` r
 # your code to draw the balls according to the random experiment
 # (repeated 1000 times)
+out <- matrix(NA, nrow = 1000, ncol = 4)
+for (i in 1:1000) {
+  num = runif(1)
+  if (num > 0.5) {
+    s <- sample(box1, size = 4, replace = TRUE)
+  } else {
+    s <- sample(box2, size = 4, replace = FALSE)
+  }
+  out[i,] <- s
+}
+head(out, 5)
 ```
+
+    ##      [,1]    [,2]    [,3]   [,4]  
+    ## [1,] "red"   "red"   "blue" "blue"
+    ## [2,] "white" "blue"  "red"  "red" 
+    ## [3,] "blue"  "white" "red"  "red" 
+    ## [4,] "blue"  "red"   "blue" "red" 
+    ## [5,] "white" "blue"  "red"  "red"
 
 Your matrix `drawn_balls` could look like this (first five rows):
 
@@ -111,7 +141,43 @@ Your matrix `drawn_balls` could look like this (first five rows):
 
 1.  Once you filled the matrix `drawn_balls`, compute the proportion of samples containing: 0, 1, 2, 3, or 4 blue balls.
 
+``` r
+counts = c(0,0,0,0,0)
+count_matrix = matrix(c(0,1,0,0,0,0), nrow=1001, ncol=6)
+for (row in 1:nrow(out)) {
+  num_blue = 0
+  for (col in 1:ncol(out)) {
+    if (out[row, col] == "blue") {
+      num_blue = num_blue + 1
+    }
+  }
+  counts[num_blue+1] = counts[num_blue+1] + 1
+  count_matrix[row+1,] = c(row, counts/row)
+}
+counts/1000
+```
+
+    ## [1] 0.042 0.340 0.337 0.177 0.104
+
 1.  Try to obtain the following plot showing the relative frequencies of number of blue balls over the series of repetitions.
+
+``` r
+library(ggplot2)
+```
+
+    ## Warning: package 'ggplot2' was built under R version 3.2.5
+
+``` r
+df <- data.frame(count_matrix)
+g<-ggplot(data=df) + geom_line(aes(x=X1, y=X2, color='0')) +geom_line(aes(x=X1, y=X3, color='1')) +
+  geom_line(aes(x=X1, y=X4, color='2')) + 
+  geom_line(aes(x=X1, y=X5, color='3')) +
+  geom_line(aes(x=X1, y=X6, color='4')) + 
+  labs(x='Reps', y='freqs', title='Relative frequencies')
+g
+```
+
+![](lab09-random-simulation_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-6-1.png)
 
 <img src="freqs-plot.png" width="80%" style="display: block; margin: auto;" />
 

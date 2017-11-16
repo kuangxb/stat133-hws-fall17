@@ -2,7 +2,7 @@
 title: "Lab 9: Random Number and Simulations"
 subtitle: "Stat 133, Fall 2017"
 author: "Gaston Sanchez"
-output: github_document
+output: html_document
 fontsize: 11pt
 urlcolor: blue
 ---
@@ -138,15 +138,17 @@ In each row you assign the output of a random sample of balls.
 ```{r}
 # your code to draw the balls according to the random experiment
 # (repeated 1000 times)
-repetitions <- 1000
-drawn_balls <- matrix(nrow = 1000, ncol = 4)
+out <- matrix(NA, nrow = 1000, ncol = 4)
 for (i in 1:1000) {
-  balls <- random()
-  for (j in 1:4){
-    drawn_balls[i,j] = balls[j]
+  num = runif(1)
+  if (num > 0.5) {
+    s <- sample(box1, size = 4, replace = TRUE)
+  } else {
+    s <- sample(box2, size = 4, replace = FALSE)
   }
+  out[i,] <- s
 }
-drawn_balls
+head(out, 5)
 ```
 
 Your matrix `drawn_balls` could look like this (first five rows):
@@ -164,19 +166,37 @@ Your matrix `drawn_balls` could look like this (first five rows):
 3. Once you filled the matrix `drawn_balls`, compute the proportion of samples
 containing: 0, 1, 2, 3, or 4 blue balls.
 ```{r Proportions}
-counter <- numeric()
-for (i in 1:repetitions){
-  blueBalls <- sum(drawn_balls[i,] == 'blue')
-  counter <- c(counter, blueBalls)
+counts = c(0,0,0,0,0)
+count_matrix = matrix(c(0,1,0,0,0,0), nrow=1001, ncol=6)
+for (row in 1:nrow(out)) {
+  num_blue = 0
+  for (col in 1:ncol(out)) {
+    if (out[row, col] == "blue") {
+      num_blue = num_blue + 1
+    }
+  }
+  counts[num_blue+1] = counts[num_blue+1] + 1
+  count_matrix[row+1,] = c(row, counts/row)
 }
-table(counter)
-counter
+counts/1000
 ```
 
 \bigskip
 
 4. Try to obtain the following plot showing the relative frequencies of number
 of blue balls over the series of repetitions.
+
+```{r}
+library(ggplot2)
+df <- data.frame(count_matrix)
+g<-ggplot(data=df) + geom_line(aes(x=X1, y=X2, color='0')) +geom_line(aes(x=X1, y=X3, color='1')) +
+  geom_line(aes(x=X1, y=X4, color='2')) + 
+  geom_line(aes(x=X1, y=X5, color='3')) +
+  geom_line(aes(x=X1, y=X6, color='4')) + 
+  labs(x='Reps', y='freqs', title='Relative frequencies')
+g
+```
+
 
 ```{r freq_plot, fig.width=2, out.width='80%', echo = FALSE, fig.align='center'}
 knitr::include_graphics('freqs-plot.png')
