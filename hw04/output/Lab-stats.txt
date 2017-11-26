@@ -1,0 +1,11 @@
+minimum  : 0 
+percent10: 0 
+quartile1: 100 
+median   : 100 
+mean     : 93.53293 
+quartile3: 100 
+percent90: 100 
+maximum  : 100 
+range    : 100 
+stdev    : 19.45435 
+missing  : 0 
