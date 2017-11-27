@@ -10,11 +10,9 @@ case_4 <- c(0, 0, 0, 0)
 context("Testing remove_missing()")
 test_that('missing values are removed', {
   expect_equal(remove_missing(case_1), c(1, 4, 7, 10))
-  expect_equal(length(remove_missing(a)), 4)
-  a <- remove_missing(a)
-  expect_equal(a, c(1, 4, 7, 10))
-  expect_equal(length(a), 4)
+  expect_equal(length(remove_missing(case_1)), 4)
   expect_equal(remove_missing(case_2), c(5))
+  expect_equal(length(remove_missing(case_2)), 1)
 })
 
 context("Testing get_minimum()")
@@ -46,8 +44,8 @@ test_that("range value should be returned", {
 context("Testing get_median()")
 
 test_that("return median of numeric vector", {
-  expect_equal(get_median(case_1), 7)
-  expect_equal(get_median(case_2), 5)
+  expect_equal(get_median(case_1), 5.5)
+  expect_equal(get_median(case_2, na.rm = TRUE), 5)
   expect_equal(get_median(case_3), 1)
   expect_equal(get_median(case_4), 0)
 })

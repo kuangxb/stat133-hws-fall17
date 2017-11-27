@@ -18,19 +18,6 @@ remove_missing <- function(vec) {
   vec
 }
 
-remove_missing <- function(vec){
-  counter <- 1
-  for (i in vec){
-    if (is.na(i)){
-      vec<- vec[-counter]
-    }
-    else{
-      counter <- counter + 1
-    }
-  }
-  vec
-}
-
 #====================================================
 # Title: Get Minimum
 # Description: Takes in a numeric vector and returns the minimum 
@@ -82,15 +69,15 @@ get_range <- function(vec, na.rm = TRUE) {
 #====================================================
 
 get_median <- function(vec, na.rm = TRUE) {
-  size <- length(vec)
   if (na.rm == TRUE) {
     vec <- remove_missing(vec)
   }
+  size <- length(vec)
   if (size %% 2 == 0) {
     vec <- sort(vec)
     return((vec[size / 2] + vec[(size / 2) + 1])/2)
   } else {
-    return (vec[size / 2 + 0.5])
+    return(vec[size / 2 + 0.5])
   }
 }
 

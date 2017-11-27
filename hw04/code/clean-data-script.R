@@ -65,7 +65,7 @@ score_grade <- function(score) {
 data$Grade <- apply(data["Overall"], 1, score_grade)
 
 
-for (i in 17:22){
+for (i in 18:23){
   x <- paste('../output', colnames(data[i]), sep = '/')
   z <- paste(x, 'stats.txt', sep = '-')
   sink(z)

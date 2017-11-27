@@ -21,13 +21,10 @@ colNames <- colnames(clean_dat[1:22])
 
 
 
-# Define UI for application that draws a histogram
 ui <- fluidPage(
   
-  # Application title
   titlePanel("Grade Visualizer"),
   
-  # Sidebar with a slider input for number of bins 
   sidebarLayout(
     sidebarPanel(
       conditionalPanel(condition = "input.tabselected == 1",
@@ -77,13 +74,9 @@ server <- function(input, output) {
   output$table <- renderTable({
     grade_freq})
   
-  
-  
   vis_barchart <- reactive({
-    # Normally we could do something like ggvis(x = ~mpg),
-    # but since the inputs are strings, we need to do a little more work.
     clean_dat %>% 
-      ggvis(x = ~Grade, fill = "light blue")%>%
+      ggvis(x = ~Grade, fill = "blue")%>%
       layer_bars()
   })
   
