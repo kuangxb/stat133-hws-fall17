@@ -2,7 +2,7 @@
 title: "post2-XuBin-Kuang"
 author: "Xu-Bin Kuang"
 date: "28/11/2017"
-output: md_document
+output: html_document
 ---
 #Post 2: Mapping Violent Crimes in America
 
